@@ -1,5 +1,6 @@
 <?php
 ob_start();
+session_name("admin_session");
 session_start();
 require_once '../dbconnection.php';
 $result = null;
@@ -15,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         try {
             $db = new DBconnection();
-
             $query = "SELECT * FROM users WHERE username = $1";
             $result_query = $db->send_query($query, [$username]);
 
@@ -23,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $result = new Response(false, "Username atau password salah!");
             } else {
                 $user = $result_query->data[0];
-
                 if ($user['role'] !== 'admin') {
                     $result = new Response(false, "Anda tidak memiliki akses admin!");
                 } elseif ($password === $user['password']) {

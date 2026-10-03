@@ -1,4 +1,5 @@
 <?php
+session_name("admin_session");
 session_start();
 require_once '../dbconnection.php';
 require_once 'reservation_admin.php';

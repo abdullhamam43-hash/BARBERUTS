@@ -1,6 +1,7 @@
 <?php
 require_once '../dbconnection.php';
 require_once 'BarberSchedule.php';
+session_name("admin_session");
 session_start();
 
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
