@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Barbershop</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        pageBg: '#f8f9fa',
+                        cardBg: '#ffffff',
+                        cardBorder: '#e5e7eb',
+                        inputBorder: '#e2e8f0',
+                        textPrimary: '#0f172a',
+                        textSecondary: '#64748b',
+                        textMuted: '#94a3b8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .form-card {
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .hidden-card {
+            display: none;
+            opacity: 0;
+            transform: scale(0.98);
+        }
+        .visible-card {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6 bg-pageBg text-textPrimary antialiased">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform -translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 text-white px-5 py-3 rounded-lg shadow-lg flex items-center space-x-2 text-sm font-medium">
+        <span id="toast-message">Pesan notifikasi</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="w-full flex-grow flex items-center justify-center py-8">
+        <div class="w-full max-w-[440px]">
+
+            <!-- CARD 1: LOGIN ADMIN (DEFAULT DISPLAY) -->
+            <div id="card-login-admin" class="form-card visible-card bg-cardBg rounded-lg border border-cardBorder shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-6 sm:p-8">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl font-bold text-textPrimary tracking-tight">Login Admin</h1>
+                </div>
+
+                <div class="border-b border-gray-100 my-4"></div>
+
+                <form id="form-admin-login" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <!-- Username / ID Admin -->
+                    <div>
+                        <label for="admin-id" class="block text-xs font-semibold text-textPrimary mb-1.5">Username / ID Admin</label>
+                        <input type="text" id="admin-id" required
+                            class="w-full px-3 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                            placeholder="">
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="admin-password" class="block text-xs font-semibold text-textPrimary mb-1.5">Password</label>
+                        <div class="relative">
+                            <input type="password" id="admin-password" required
+                                class="w-full pl-3 pr-10 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                                placeholder="">
+                            <button type="button" onclick="togglePasswordVisibility('admin-password', 'eye-icon-admin')" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700">
+                                <i id="eye-icon-admin" data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kode Keamanan / PIN Pegawai (Opsional) -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label for="admin-pin" class="block text-xs font-semibold text-textPrimary">Kode Keamanan / PIN Pegawai</label>
+                            <span class="text-[11px] text-textMuted font-normal">Opsional</span>
+                        </div>
+                        <input type="password" id="admin-pin"
+                            class="w-full px-3 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors"
+                            placeholder="">
+                    </div>
+
+                    <!-- Main Action Button -->
+                    <div class="pt-2">
+                        <button type="submit" 
+                            class="w-full bg-black hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-md text-sm transition-colors duration-150 flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-black">
+                            <span>Masuk sebagai Admin</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Separator ATAU -->
+                <div class="relative my-6 flex items-center justify-center">
+                    <div class="border-t border-gray-200 w-full"></div>
+                    <span class="bg-cardBg px-3 text-[11px] font-medium text-textMuted uppercase tracking-wider absolute">ATAU</span>
+                </div>
+
+                <!-- Secondary Action Button -->
+                <div>
+                    <button type="button" onclick="switchCard('card-login-customer')" 
+                        class="w-full bg-white hover:bg-gray-50 text-textPrimary font-medium py-2.5 px-4 rounded-md text-sm border border-gray-300 transition-colors duration-150 flex items-center justify-center space-x-2">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>Kembali ke Login Pelanggan</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 2: LOGIN AKUN (PELANGGAN) -->
+            <div id="card-login-customer" class="form-card hidden-card bg-cardBg rounded-lg border border-cardBorder shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-6 sm:p-8">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl font-bold text-textPrimary tracking-tight">Login Akun</h1>
+                    <p class="text-xs text-textSecondary mt-2">Silakan masukkan username/email dan password Anda</p>
+                </div>
+
+                <div class="border-b border-gray-100 my-4"></div>
+
+                <form id="form-customer-login" onsubmit="handleCustomerLogin(event)" class="space-y-4">
+                    <div>
+                        <label for="customer-email" class="block text-xs font-semibold text-textPrimary mb-1.5">Email</label>
+                        <input type="email" id="customer-email" required
+                            class="w-full px-3 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="customer-password" class="block text-xs font-semibold text-textPrimary mb-1.5">Password</label>
+                        <div class="relative">
+                            <input type="password" id="customer-password" required
+                                class="w-full pl-3 pr-10 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors">
+                            <button type="button" onclick="togglePasswordVisibility('customer-password', 'eye-icon-cust')" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700">
+                                <i id="eye-icon-cust" data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" 
+                            class="w-full bg-black hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-md text-sm transition-colors duration-150">
+                            Login
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="button" onclick="switchCard('card-login-admin')" 
+                            class="w-full bg-white hover:bg-gray-50 text-textPrimary font-medium py-2.5 px-4 rounded-md text-sm border border-gray-300 transition-colors duration-150">
+                            Masuk sebagai Admin / Pegawai
+                        </button>
+                    </div>
+                </form>
+
+                <div class="border-b border-gray-100 my-6"></div>
+
+                <div class="text-center text-xs text-textSecondary">
+                    Belum punya akun? 
+                    <button type="button" onclick="switchCard('card-register')" class="font-bold text-textPrimary hover:underline focus:outline-none">
+                        Daftar di sini
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 3: DAFTAR AKUN BARU -->
+            <div id="card-register" class="form-card hidden-card bg-cardBg rounded-lg border border-cardBorder shadow-[0_2px_8px_rgba(0,0,0,0.04)] p-6 sm:p-8">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl font-bold text-textPrimary tracking-tight">Daftar Akun Baru</h1>
+                    <p class="text-xs text-textSecondary mt-2">Lengkapi data formulir pendaftaran di bawah ini</p>
+                </div>
+
+                <div class="border-b border-gray-100 my-4"></div>
+
+                <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4">
+                    <div>
+                        <label for="reg-fullname" class="block text-xs font-semibold text-textPrimary mb-1.5">Nama Lengkap</label>
+                        <input type="text" id="reg-fullname" required
+                            class="w-full px-3 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="reg-email" class="block text-xs font-semibold text-textPrimary mb-1.5">Email</label>
+                        <input type="email" id="reg-email" required
+                            class="w-full px-3 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="reg-password" class="block text-xs font-semibold text-textPrimary mb-1.5">Password</label>
+                        <div class="relative">
+                            <input type="password" id="reg-password" required
+                                class="w-full pl-3 pr-10 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors">
+                            <button type="button" onclick="togglePasswordVisibility('reg-password', 'eye-icon-reg1')" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700">
+                                <i id="eye-icon-reg1" data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reg-confirm-password" class="block text-xs font-semibold text-textPrimary mb-1.5">Konfirmasi Password</label>
+                        <div class="relative">
+                            <input type="password" id="reg-confirm-password" required
+                                class="w-full pl-3 pr-10 py-2 text-sm border border-inputBorder rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors">
+                            <button type="button" onclick="togglePasswordVisibility('reg-confirm-password', 'eye-icon-reg2')" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700">
+                                <i id="eye-icon-reg2" data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" 
+                            class="w-full bg-black hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-md text-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-black">
+                            Daftar Sekarang
+                        </button>
+                    </div>
+                </form>
+
+                <div class="border-b border-gray-100 my-6"></div>
+
+                <div class="text-center text-xs text-textSecondary">
+                    Sudah memiliki akun? 
+                    <button type="button" onclick="switchCard('card-login-customer')" class="font-bold text-textPrimary hover:underline focus:outline-none">
+                        Masuk ke halaman Login
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center text-xs font-semibold tracking-widest text-textMuted uppercase">
+        BARBERSHOP
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Switch Card Logic
+        function switchCard(targetCardId) {
+            const cards = document.querySelectorAll('.form-card');
+            cards.forEach(card => {
+                if (card.id === targetCardId) {
+                    card.classList.remove('hidden-card');
+                    card.classList.add('visible-card');
+                } else {
+                    card.classList.remove('visible-card');
+                    card.classList.add('hidden-card');
+                }
+            });
+        }
+
+        // Toggle Password Visibility
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Toast Handler
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.textContent = message;
+            toast.classList.remove('-translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Form Submit Actions
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const adminId = document.getElementById('admin-id').value;
+            showToast(`Login Admin berhasil untuk ${adminId}!`);
+        }
+
+        function handleCustomerLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('customer-email').value;
+            showToast(`Login Pelanggan berhasil: ${email}`);
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const pwd = document.getElementById('reg-password').value;
+            const confirmPwd = document.getElementById('reg-confirm-password').value;
+
+            if (pwd !== confirmPwd) {
+                showToast('Konfirmasi password tidak sesuai');
+                return;
+            }
+            showToast('Pendaftaran akun berhasil!');
+            setTimeout(() => switchCard('card-login-customer'), 1000);
+        }
+    </script>
+</body>
+</html>
