@@ -1,6 +1,4 @@
-AKUN ADMIN
-admin2
-123456
+dbconnection.php tidak dimasukkan karna bersifat private
 Kelompok 1 
 Abdullah Hammam -> Ketua
 Christiano Thedo Gwantoro
